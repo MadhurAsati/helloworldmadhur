@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="DockerFile" />
+    <Content Include="Dockerfile" />
     <Content Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
