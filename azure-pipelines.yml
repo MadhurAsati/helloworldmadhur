@@ -14,7 +14,7 @@ variables:
   dockerRegistryServiceConnection: 'b25bb2ef-df13-417a-8498-a41dd839c45d'
   imageRepository: 'madhurasatihelloworldmadhur'
   containerRegistry: 'madhurtest.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'helloworldmadhur/helloworld/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'madhurtest17839231-auth'
 
