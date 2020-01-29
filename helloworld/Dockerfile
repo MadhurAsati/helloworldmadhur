@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/windows/nanoserver:1803
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+
 RUN mkdir \app
 WORKDIR /app
 
