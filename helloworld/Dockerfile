@@ -1,26 +1,12 @@
-FROM mcr.microsoft.com/windows/servercore:1803 as installer
-
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
+FROM node:argon
 
 
-FROM mcr.microsoft.com/windows/nanoserver:1803
+RUN "apt-get update && apt-get clean"
+RUN npm install -g express
+RUN npm install -g nodemon
 
-WORKDIR C:\nodejs
-COPY --from=installer C:\nodejs\ .
-RUN SETX PATH C:\nodejs
-RUN npm config set registry https://registry.npmjs.org/
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-WORKDIR /app
-
-# install and cache app dependencies
-COPY src/WebSpa/package.json /app/src/WebSpa/package.json
-
-WORKDIR /app/src/WebSpa
-RUN npm install
-RUN npm install -g @angular/cli@latest
-
-# add app
-COPY . /app
-
-# start app
-CMD cd /app/src/WebSpa && ng serve --host 0.0.0.0
+EXPOSE 9000
