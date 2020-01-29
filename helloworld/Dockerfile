@@ -1,10 +1,29 @@
-FROM windowsservercore
+FROM mcr.microsoft.com/windows/servercore:1803 as installer
 
-ENV NPM_CONFIG_LOGLEVEL info
-ENV IOJS_VERSION 3.2.0
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
 
-RUN powershell -Command "wget -Uri https://iojs.org/dist/v%IOJS_VERSION%/iojs-v%IOJS_VERSION%-x64.msi -OutFile iojs.msi -UseBasicParsing"
+RUN Invoke-WebRequest -OutFile nodejs.zip -UseBasicParsing "https://nodejs.org/dist/v12.4.0/node-v12.4.0-win-x64.zip"; `
+Expand-Archive nodejs.zip -DestinationPath C:\; `
+Rename-Item "C:\\node-v12.4.0-win-x64" c:\nodejs
 
-RUN msiexec.exe /q /i iojs.msi
+FROM mcr.microsoft.com/windows/nanoserver:1803
 
-CMD [ "iojs" ]
+WORKDIR C:\nodejs
+COPY --from=installer C:\nodejs\ .
+RUN SETX PATH C:\nodejs
+RUN npm config set registry https://registry.npmjs.org/
+
+WORKDIR /app
+
+# install and cache app dependencies
+COPY src/WebSpa/package.json /app/src/WebSpa/package.json
+
+WORKDIR /app/src/WebSpa
+RUN npm install
+RUN npm install -g @angular/cli@latest
+
+# add app
+COPY . /app
+
+# start app
+CMD cd /app/src/WebSpa && ng serve --host 0.0.0.0
