@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows/servercore:1803 as installer
+FROM mcr.microsoft.com/windows/nanoserver:1803
 RUN mkdir \app
 WORKDIR /app
 
