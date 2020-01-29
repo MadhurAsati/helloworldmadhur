@@ -1,10 +1,10 @@
-FROM windowsservercore
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-ENV NPM_CONFIG_LOGLEVEL info
-ENV IOJS_VERSION 3.2.0
+RUN mkdir \app
+WORKDIR /app
 
-RUN powershell -Command "wget -Uri https://iojs.org/dist/v%IOJS_VERSION%/iojs-v%IOJS_VERSION%-x64.msi -OutFile iojs.msi -UseBasicParsing"
+ONBUILD COPY package.json package.json
+ONBUILD RUN npm install
+ONBUILD COPY . .
 
-RUN msiexec.exe /q /i iojs.msi
-
-CMD [ "iojs" ]
+CMD [ "npm.cmd", "start" ]
