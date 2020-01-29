@@ -1,26 +1,10 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM windowsservercore
 
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
+ENV NPM_CONFIG_LOGLEVEL info
+ENV IOJS_VERSION 3.2.0
 
+RUN powershell -Command "wget -Uri https://iojs.org/dist/v%IOJS_VERSION%/iojs-v%IOJS_VERSION%-x64.msi -OutFile iojs.msi -UseBasicParsing"
 
-FROM mcr.microsoft.com/windows/nanoserver:1803
+RUN msiexec.exe /q /i iojs.msi
 
-WORKDIR C:\nodejs
-COPY --from=installer C:\nodejs\ .
-RUN SETX PATH C:\nodejs
-RUN npm config set registry https://registry.npmjs.org/
-
-WORKDIR /app
-
-# install and cache app dependencies
-COPY src/WebSpa/package.json /app/src/WebSpa/package.json
-
-WORKDIR /app/src/WebSpa
-RUN npm install
-
-
-# add app
-COPY . /app
-
-# start app
-CMD cd /app/src/WebSpa && ng serve --host 0.0.0.0
+CMD [ "iojs" ]
