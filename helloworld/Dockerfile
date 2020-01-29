@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows/nanoserver:1803-amd64
+FROM  mcr.microsoft.com/windows/nanoserver:1809
 
 RUN mkdir \app
 WORKDIR /app
