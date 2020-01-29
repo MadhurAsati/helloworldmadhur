@@ -1,3 +1,7 @@
+image.
+
+Here is an example of Windows-based Docker file with Node.JS installation:
+
 FROM mcr.microsoft.com/windows/servercore:1803 as installer
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
