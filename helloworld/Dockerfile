@@ -1,19 +1,10 @@
-FROM node:10
+FROM windowsservercore
 
-# Create app directory
-WORKDIR /usr/src/helloworld
+ENV NPM_CONFIG_LOGLEVEL info
+ENV IOJS_VERSION 3.2.0
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+RUN powershell -Command "wget -Uri https://iojs.org/dist/v%IOJS_VERSION%/iojs-v%IOJS_VERSION%-x64.msi -OutFile iojs.msi -UseBasicParsing"
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
+RUN msiexec.exe /q /i iojs.msi
 
-# Bundle app source
-COPY . .
-
-EXPOSE 8080
-CMD [ "node", "server.js" ]
+CMD [ "iojs" ]
